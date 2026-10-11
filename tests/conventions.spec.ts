@@ -6,7 +6,7 @@ const SECTION_IDS = ['hero', 'about', 'skills', 'projects', 'repos', 'contact'];
 // SPEC.md line 4: Sections with ids: #hero #about #skills #projects #repos #contact. All six must exist.
 // Assumption: all six are on the page at BASE_URL (a one-page site).
 test('all six sections exist (SPEC.md:4)', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('./');
   for (const id of SECTION_IDS) {
     await expect.soft(page.locator(`#${id}`), `#${id} should exist`).toBeAttached();
   }
@@ -17,7 +17,7 @@ test('all six sections exist (SPEC.md:4)', async ({ page }) => {
 // the #repos fetch, as document scrollWidth not exceeding the viewport width.
 test('no horizontal scroll at 375px (SPEC.md:5)', async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 667 });
-  await page.goto('/');
+  await page.goto('./');
   await page.waitForLoadState('networkidle');
   const { scrollWidth, clientWidth } = await page.evaluate(() => ({
     scrollWidth: document.documentElement.scrollWidth,
@@ -35,7 +35,7 @@ test('no horizontal scroll at 375px (SPEC.md:5)', async ({ page }) => {
 //   that request; if the page makes no such request they are skipped, since neither branch can be forced.
 test.describe('#repos (SPEC.md:6)', () => {
   test('shows repo cards or a message', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('./');
     await expect
       .poll(async () => (await countRepoCards(page)) > 0 || (await reposTextWithoutHeadings(page)).length > 0, {
         message: '#repos should show repo cards or a message',
@@ -54,7 +54,7 @@ test.describe('#repos (SPEC.md:6)', () => {
           await route.abort('failed');
         }
       });
-      await page.goto('/');
+      await page.goto('./');
       await page.waitForLoadState('networkidle');
       test.skip(!githubApiCalled, 'Page made no request to api.github.com, so this case cannot be forced.');
 
@@ -68,7 +68,7 @@ test.describe('#repos (SPEC.md:6)', () => {
 // Assumption: email is an <a href="mailto:...">, GitHub is an <a> to github.com, LinkedIn is an <a> to linkedin.com.
 for (const id of ['hero', 'contact']) {
   test(`#${id} has email, GitHub and LinkedIn links (SPEC.md:7)`, async ({ page }) => {
-    await page.goto('/');
+    await page.goto('./');
     const section = page.locator(`#${id}`);
     await expect.soft(section.locator('a[href^="mailto:"]'), 'email link').not.toHaveCount(0);
     await expect.soft(section.locator('a[href*="github.com"]'), 'GitHub link').not.toHaveCount(0);

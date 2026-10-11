@@ -9,7 +9,7 @@ const DARK = /(^|\s)dark(\s|$)/;
 // button there or, if there are several, the one whose name mentions dark/light/theme/mode.
 // "Toggles" means each click flips the class, so two clicks return to the starting state.
 test('nav button toggles dark class on body (SPEC.md:10)', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('./');
   const toggle = await darkModeToggle(page);
   const body = page.locator('body');
   const startsDark = await body.evaluate((b) => b.classList.contains('dark'));
@@ -27,7 +27,7 @@ test('nav button toggles dark class on body (SPEC.md:10)', async ({ page }) => {
 // Assumption: "the session" means the same browser tab, so the choice must survive a page reload.
 // Starting state is light (the test browser reports a light colour scheme).
 test('dark mode choice survives a reload (SPEC.md:11)', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('./');
   const body = page.locator('body');
   await expect(body).not.toHaveClass(DARK);
 
